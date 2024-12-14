@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Jobs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/candidate/home.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="text-success fw-bold">JobPortal</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/candidate/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidate/jobs/search">Find Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidate/profile">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Job Listings -->
+    <div class="container mt-5">
+        <!-- Job Categories -->
+        <div class="d-flex gap-4 mb-4 border-bottom pb-3">
+            <a href="#" class="text-decoration-none fw-bold text-dark">Suggested Jobs</a>
+            <a href="#" class="text-decoration-none text-muted">Applied Jobs</a>
+            <a href="/candidate/saved-jobs" class="text-decoration-none">Saved Jobs</a>
+        </div>
+
+        <!-- Job Cards -->
+        <div class="row g-4">
+            <!-- Recommended Jobs -->
+            <div th:each="recommendation : ${recommendedJobs.content}" class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title" th:text="${recommendation.job.name}">Job Title</h5>
+                                <p class="card-text text-muted" th:text="${recommendation.job.company.name}">Company Name</p>
+                            </div>
+                            <div th:with="candidateId=${@candidateServices.getCandidateByUsername(#authentication.name).id}">
+                                <form th:if="${!savedJobService.isJobSaved(candidateId, recommendation.job.id)}"
+                                      th:action="@{/candidate/save-job/{jobId}(jobId=${recommendation.job.id})}" 
+                                      method="POST">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">Save</button>
+                                </form>
+                                <form th:if="${savedJobService.isJobSaved(candidateId, recommendation.job.id)}"
+                                      th:action="@{/candidate/unsave-job/{jobId}(jobId=${recommendation.job.id})}" 
+                                      method="POST">
+                                    <button type="submit" class="btn btn-secondary btn-sm">Unsave</button>
+                                </form>
+                            </div>
+                        </div>
+                        <p class="card-text">
+                            <span th:text="${#numbers.formatDecimal(recommendation.job.minSalary, 0, 'COMMA', 0, 'POINT')}">$50K</span>
+                            -
+                            <span th:text="${#numbers.formatDecimal(recommendation.job.maxSalary, 0, 'COMMA', 0, 'POINT')}">$60K</span>
+                            / yr
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted" th:text="${recommendation.job.type}">Full-time</small>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-success" th:text="'Match: ' + ${#numbers.formatDecimal(recommendation.score * 100, 0, 0)} + '%'">Match Score</span>
+                            <button class="btn btn-outline-success">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- Previous Button -->
+                <li class="page-item" th:classappend="${!recommendedJobs.hasPrevious ? 'disabled' : ''}">
+                    <a class="page-link"
+                       th:href="@{/candidate/recommended-jobs(page=${recommendedJobs.currentPage - 1}, size=${recommendedJobs.pageSize})}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li class="page-item"
+                    th:each="pageNum : ${#numbers.sequence(1, recommendedJobs.totalPages)}"
+                    th:classappend="${pageNum == recommendedJobs.currentPage ? 'active' : ''}">
+                    <a class="page-link"
+                       th:href="@{/candidate/recommended-jobs(page=${pageNum}, size=${recommendedJobs.pageSize})}"
+                       th:text="${pageNum}">1</a>
+                </li>
+
+                <!-- Next Button -->
+                <li class="page-item" th:classappend="${!recommendedJobs.hasNext ? 'disabled' : ''}">
+                    <a class="page-link"
+                       th:href="@{/candidate/recommended-jobs(page=${recommendedJobs.currentPage + 1}, size=${recommendedJobs.pageSize})}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Page Info -->
+        <div class="text-center mt-2">
+            <small class="text-muted">
+                Showing
+                <span th:text="${recommendedJobs.startCount}">1</span>
+                -
+                <span th:text="${recommendedJobs.endCount}">6</span>
+                of
+                <span th:text="${recommendedJobs.totalElements}">100</span>
+                jobs
+            </small>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Search - AlwaysApply</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="/css/job/list-job-seach.css" />
+</head>
+<body>
+<!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="text-success fw-bold">JobPortal</span>
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidate/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/candidate/jobs/search">Find Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/candidate/profile">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<!-- Main Content -->
+<div class="container my-4">
+    <h1 class="mb-2 mt-5 pt-4">Job Search</h1>
+    <p class="text-muted mb-4">
+        Search for your desired job matching your skills
+    </p>
+
+<form th:action="@{/jobs/search}" method="get">
+    <div class="search-box bg-light p-3 rounded-3 mb-4">
+        <div class="row g-3">
+            <!-- Job Title -->
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" name="title" 
+                           th:value="${param.title}" placeholder="Enter Job title"/>
+                </div>
+            </div>
+
+            <!-- Salary Range -->
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="minSalary" 
+                       th:value="${param.minSalary}" placeholder="Min Salary"/>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="maxSalary" 
+                       th:value="${param.maxSalary}" placeholder="Max Salary"/>
+            </div>
+
+            <!-- Job Type -->
+            <div class="col-md-3">
+                <select class="form-select" name="jobType">
+                    <option value="">All Job Types</option>
+                    <option value="FULL_TIME" th:selected="${param.jobType == 'FULL_TIME'}">Full Time</option>
+                    <option value="PART_TIME" th:selected="${param.jobType == 'PART_TIME'}">Part Time</option>
+                    <option value="CONTRACT" th:selected="${param.jobType == 'CONTRACT'}">Contract</option>
+                </select>
+            </div>
+
+            <!-- Work Mode -->
+            <div class="col-md-3">
+                <select class="form-select" name="workMode">
+                    <option value="">All Work Modes</option>
+                    <option value="ONSITE" th:selected="${param.workMode == 'ON_SITE'}">On-Site</option>
+                    <option value="REMOTE" th:selected="${param.workMode == 'REMOTE'}">Remote</option>
+                    <option value="HYBRID" th:selected="${param.workMode == 'HYBRID'}">Hybrid</option>
+                </select>
+            </div>
+
+            <!-- Sort By -->
+<!--            <div class="col-md-3">-->
+<!--                <select class="form-select" name="sortBy">-->
+<!--                    <option value="createdAt" th:selected="${param.sortBy == 'createdAt'}">Latest</option>-->
+<!--                    <option value="maxSalary" th:selected="${param.sortBy == 'maxSalary'}">Highest Paid</option>-->
+<!--                </select>-->
+<!--            </div>-->
+
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-purple w-100">Search</button>
+            </div>
+            <div class="col-md-1">
+                <a th:href="@{/jobs/search}" class="btn btn-outline-secondary w-100">Clear</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+    
+
+    <!-- Filter and Results -->
+<!--    <div class="row">-->
+<!--        &lt;!&ndash; Filters &ndash;&gt;-->
+<!--        <div class="col-md-3">-->
+<!--            <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                    <div-->
+<!--                            class="d-flex justify-content-between align-items-center mb-3"-->
+<!--                    >-->
+<!--                        <h5 class="card-title mb-0">Filter</h5>-->
+<!--                        <a href="#" class="text-purple text-decoration-none"-->
+<!--                        >Clear all</a-->
+<!--                        >-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Salary Range &ndash;&gt;-->
+<!--                    <div class="mb-3">-->
+<!--                        <h6>Salary Range</h6>-->
+<!--                        <div class="row g-2">-->
+<!--                            <div class="col-6">-->
+<!--                                <input type="text" class="form-control" placeholder="Min" />-->
+<!--                            </div>-->
+<!--                            <div class="col-6">-->
+<!--                                <input type="text" class="form-control" placeholder="Max" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Job Type &ndash;&gt;-->
+<!--                    <div class="mb-3">-->
+<!--                        <h6>Job Type</h6>-->
+<!--                        <div class="form-check">-->
+<!--                            <input-->
+<!--                                    class="form-check-input"-->
+<!--                                    type="checkbox"-->
+<!--                                    id="all"-->
+<!--                                    checked-->
+<!--                            />-->
+<!--                            <label class="form-check-label" for="all">All (2567)</label>-->
+<!--                        </div>-->
+<!--                        <div class="form-check">-->
+<!--                            <input-->
+<!--                                    class="form-check-input"-->
+<!--                                    type="checkbox"-->
+<!--                                    id="fullTime"-->
+<!--                            />-->
+<!--                            <label class="form-check-label" for="fullTime"-->
+<!--                            >Full-Time (450)</label-->
+<!--                            >-->
+<!--                        </div>-->
+<!--                        <div class="form-check">-->
+<!--                            <input-->
+<!--                                    class="form-check-input"-->
+<!--                                    type="checkbox"-->
+<!--                                    id="partTime"-->
+<!--                            />-->
+<!--                            <label class="form-check-label" for="partTime"-->
+<!--                            >Part-Time (145)</label-->
+<!--                            >-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Work Mode &ndash;&gt;-->
+<!--                    <div class="mb-3">-->
+<!--                        <h6>Work Mode</h6>-->
+<!--                        <div class="form-check">-->
+<!--                            <input class="form-check-input" type="checkbox" id="onSite" />-->
+<!--                            <label class="form-check-label" for="onSite">On-Site</label>-->
+<!--                        </div>-->
+<!--                        <div class="form-check">-->
+<!--                            <input class="form-check-input" type="checkbox" id="remote" />-->
+<!--                            <label class="form-check-label" for="remote"-->
+<!--                            >Remote (180)</label-->
+<!--                            >-->
+<!--                        </div>-->
+<!--                        <div class="form-check">-->
+<!--                            <input class="form-check-input" type="checkbox" id="hybrid" />-->
+<!--                            <label class="form-check-label" for="hybrid"-->
+<!--                            >Hybrid (200)</label-->
+<!--                            >-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <!-- Job Listings -->
+        <div class="col-md-9">
+<!--            <div class="d-flex justify-content-between align-items-center mb-3">-->
+<!--                <h5>All Jobs (2310)</h5>-->
+<!--                <select class="form-select w-auto">-->
+<!--                    <option>Popular</option>-->
+<!--                    <option>Latest</option>-->
+<!--                    <option>Highest Paid</option>-->
+<!--                </select>-->
+<!--            </div>-->
+
+            <!-- Job Cards Grid -->
+            <div class="row g-3">
+                <div class="col-md-6" th:each="job : ${jobs.content}">
+                    <div class="card h-100 job-card">
+                        <div class="card-body">
+                            <!-- Header: Job Title, Type, and Bookmark -->
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1" th:text="${job.name}">Job Title</h5>
+                                    <div class="mb-2">
+                                        <span class="badge bg-success-subtle text-success me-2" th:text="${job.type}">FULL-TIME</span>
+                                        <span class="badge bg-primary-subtle text-primary" th:text="${job.workMode}">REMOTE</span>
+                                    </div>
+                                    <div class="text-muted">
+                                        <i class="bi bi-currency-dollar"></i>
+                                        <span th:text="${#numbers.formatDecimal(job.minSalary, 0, 'COMMA', 0, 'POINT')}">20,000</span> -
+                                        <span th:text="${#numbers.formatDecimal(job.maxSalary, 0, 'COMMA', 0, 'POINT')}">25,000</span> USD
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-purple btn-sm bookmark-btn">
+                                    <i class="bi bi-bookmark"></i>
+                                </button>
+                            </div>
+
+                            <!-- Company Info -->
+                            <div class="d-flex align-items-center mt-3">
+                                <img th:if="${job.company != null and job.company.logoURL != null}"
+                                     th:src="${job.company.logoURL}"
+                                     alt="Company Logo"
+                                     class="company-logo me-2"/>
+                                <img th:unless="${job.company != null and job.company.logoURL != null}"
+                                     src="https://logo.clearbit.com/google.com"
+                                     alt="Default Company Logo"
+                                     class="company-logo me-2"/>
+                                <div>
+                                    <h6 class="mb-0" th:text="${job.company != null ? job.company.name : 'Company Name'}">Company Name</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <span th:text="${job.company.address != null ? job.company.address:'test' }">Location</span>
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Skills Required -->
+                            <div class="mt-3">
+                                <div class="skills-container">
+                                    <span class="badge bg-light text-dark me-1 mb-1"
+                                          th:each="jobSkill : ${job.jobSkills}"
+                                          th:text="${jobSkill.skill.skillName}">Skill</span>
+                                </div>
+                            </div>
+
+                            <!-- Footer: Applicants and Action Buttons -->
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+<!--                                <div class="d-flex align-items-center">-->
+<!--                                    <div class="avatar-group">-->
+<!--                                        <span class="applicant-count">-->
+<!--                                            <i class="bi bi-people"></i>-->
+<!--                                            <span th:text="${job.numberOfApplicants}">10</span>+ applicants-->
+<!--                                        </span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                                <div class="d-flex gap-2">
+                                    <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline-purple btn-sm">
+                                        View details
+                                    </a>
+                                    <a th:href="@{/jobs/{id}/apply(id=${job.id})}" class="btn btn-purple btn-sm">
+                                        Apply now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

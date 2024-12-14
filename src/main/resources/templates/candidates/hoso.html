@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div th:if="${error != null}" class="alert alert-danger" role="alert">
+    <span th:text="${error}"></span>
+</div>
+<div class="container mt-4">
+    <!-- Skills Section -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-2">Kỹ năng</h2>
+                    <p class="text-muted">
+                        Mô tả kỹ các kỹ năng bạn có giúp người khác hiểu được điểm mạnh
+                        của bạn và giúp gia tăng cơ hội kết nối với người khác.
+                    </p>
+                </div>
+                <img th:src="@{/images/profile-skills.png}" alt="Skills Icon" class="skills-icon" />
+            </div>
+            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#skillsModal">
+                <i class="bi bi-plus"></i> Thêm mục
+            </button>
+
+            <!-- Skills List -->
+            <div id="skillsList" class="mt-4">
+                <div th:each="candidateSkill : ${candidateSkills}" class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title" th:text="${candidateSkill.skill.skillName}">Skill Name</h5>
+                                <span class="badge bg-primary" th:text="${candidateSkill.skillLevel}">INTERMEDIATE</span>
+                                <p class="card-text mt-2" th:text="${candidateSkill.moreInfo}">Description</p>
+                            </div>
+                            <div>
+                                <form th:action="@{/candidates/{candidateId}/skills/{skillId}(candidateId=${candidateSkill.candidate.id}, skillId=${candidateSkill.skill.id})}"
+                                      method="post"
+                                      style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Skills Modal -->
+<div class="modal fade" id="skillsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kỹ năng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="skillsForm" th:action="@{/candidates/ho-so}"
+                      th:object="${candidateSkillDTO}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Tên kỹ năng *</label>
+                        <select class="form-select" th:field="*{skillId}">
+                            <option th:each="skill : ${skills}"
+                                    th:value="${skill.id}"
+                                    th:text="${skill.skillName}"></option>
+                        </select>
+<!--                        <div class="text-danger" th:if="${#fields.hasErrors('skillName')}" th:errors="*{skillId}"></div>-->
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Đánh giá</label>
+                        <select class="form-select" th:field="*{skillLevel}">
+                            <option th:each="level : ${T(iuh.fit.backend.enums.SkillLevel).values()}"
+                                    th:value="${level}"
+                                    th:text="${level}">BEGINNER</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả chi tiết</label>
+                        <textarea class="form-control"
+                                  th:field="*{moreInfo}"
+                                  rows="4"
+                                  placeholder="Mô tả chi tiết kỹ năng"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-success">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    // Close modal after successful form submission
+    document.getElementById('skillsForm').addEventListener('submit', function() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('skillsModal'));
+        modal.hide();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Invitation</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+<div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2 style="color: #2c3e50;">Job Invitation</h2>
+
+    <p>Dear <span th:text="${candidateName}">Candidate</span>,</p>
+
+    <p>We are excited to invite you to apply for the position of <strong th:text="${jobTitle}">Position</strong>.</p>
+
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <h3 style="margin-top: 0;">Job Details:</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li>Work Mode: <span th:text="${workMode}">Remote</span></li>
+            <li>Job Type: <span th:text="${jobType}">Full-time</span></li>
+            <li>Salary Range: $<span th:text="${minSalary}">50,000</span> - $<span th:text="${maxSalary}">80,000</span></li>
+            <li>Start Date: <span th:text="${startDate}">01/01/2024</span></li>
+        </ul>
+
+        <h4>Required Skills:</h4>
+        <ul>
+            <li th:each="skill : ${requiredSkills}" th:text="${skill}">Skill</li>
+        </ul>
+    </div>
+
+    <p>Please review the position details and let us know if you're interested in pursuing this opportunity.</p>
+
+    <p>Best regards,<br>Recruitment Team</p>
+</div>
+</body>
+</html>

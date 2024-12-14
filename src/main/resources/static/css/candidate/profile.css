@@ -1,0 +1,50 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.avatar-circle {
+    width: 120px;
+    height: 120px;
+    background-color: #004d40;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.initials {
+    font-size: 48px;
+    color: white;
+    font-weight: bold;
+}
+
+.profile-info {
+    color: #4a4a4a;
+}
+
+.progress {
+    height: 8px;
+}
+
+.btn-outline-dark {
+    border-color: #dee2e6;
+}
+
+.btn-outline-dark:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+    border-color: #dee2e6;
+}
+
+.profile-actions .btn {
+    padding: 12px;
+}
+
+.nav-link.active {
+    color: #198754 !important;
+}
+
+.nav-link:hover {
+    color: #198754;
+}

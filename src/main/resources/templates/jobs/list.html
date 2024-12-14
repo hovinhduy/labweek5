@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Job Listings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Job Listings</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div th:each="job : ${jobs}" class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${job.name}">Job Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="${job.company.name}">Company Name</h6>
+
+                    <p class="card-text" th:text="${job.description}">Job Description</p>
+
+                    <div class="mt-3">
+                        <h6>Required Skills:</h6>
+                        <ul class="list-unstyled">
+                            <li th:each="jobSkill : ${job.jobSkills}">
+                                <span th:text="${jobSkill.skill.name}">Skill Name</span> -
+                                <span th:text="${jobSkill.skillLevel == 0 ? 'Beginner' :
+                                                   jobSkill.skillLevel == 1 ? 'Intermediate' : 'Expert'}">
+                                        Level
+                                    </span>
+                                <small class="text-muted" th:if="${jobSkill.moreInfo}"
+                                       th:text="'(' + ${jobSkill.moreInfo} + ')'">
+                                    Additional Info
+                                </small>
+                                <!-- Thêm nút View Recommended Candidates -->
+                                <div class="mt-3 d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary">Post Job</button>
+                                    <a th:href="@{/jobs/{id}/recommended-candidates(id=${jobPostingDTO.id})}"
+                                       class="btn btn-outline-primary">
+                                        <i class="bi bi-people"></i> View Recommended Candidates
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
