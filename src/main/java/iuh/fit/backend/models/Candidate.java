@@ -33,7 +33,6 @@ public class Candidate {
     private LocalDate dob;
     private String email;
     private String fullName;
-    private String cvUrl;
 
     @OneToMany(mappedBy = "candidate")
     @ToString.Exclude

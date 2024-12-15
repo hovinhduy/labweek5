@@ -159,31 +159,31 @@ public class CandidateController {
         candidateServices.save(currentCandidate);
         return "redirect:/candidate/profile";
     }
-    @PostMapping("/candidate/upload-cv")
-    @ResponseBody
-    public ResponseEntity<?> uploadCV(@RequestParam("file") MultipartFile file,
-                                      Authentication authentication) {
-        try {
-            String username = authentication.getName();
-            Candidate candidate = candidateServices.getCandidateByUsername(username);
-
-            String cvUrl = cloudinaryService.uploadPdf(file);
-            candidate.setCvUrl(cvUrl); // Thêm trường cvUrl vào Candidate entity
-            candidateServices.save(candidate);
-
-            return ResponseEntity.ok(Map.of(
-                    "message", "CV uploaded successfully",
-                    "url", cvUrl
-            ));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "error", e.getMessage()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of(
-                    "error", "Failed to upload CV"
-            ));
-        }
-    }
+//    @PostMapping("/candidate/upload-cv")
+//    @ResponseBody
+//    public ResponseEntity<?> uploadCV(@RequestParam("file") MultipartFile file,
+//                                      Authentication authentication) {
+//        try {
+//            String username = authentication.getName();
+//            Candidate candidate = candidateServices.getCandidateByUsername(username);
+//
+////            String cvUrl = cloudinaryService.uploadPdf(file);
+////            candidate.setCvUrl(cvUrl); // Thêm trường cvUrl vào Candidate entity
+//            candidateServices.save(candidate);
+//
+//            return ResponseEntity.ok(Map.of(
+//                    "message", "CV uploaded successfully",
+//                    "url", cvUrl
+//            ));
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(Map.of(
+//                    "error", e.getMessage()
+//            ));
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body(Map.of(
+//                    "error", "Failed to upload CV"
+//            ));
+//        }
+//    }
 
 }
